@@ -66,7 +66,7 @@ const Login = () => {
 					<div className='flex flex-col items-start justify-start text-sm md:text-base gap-y-1 w-full '>
 						<label htmlFor='email' className='text-[--primary-text] w-full font-medium flex justify-between '>
 							<p>	{t("email")}</p>
-							<small className='text-end text-gray-500 cursor-pointer' onClick={() => { setShowLogin(false); setShowLoginPhone(true) }}>{t("or phone no.")}</small>
+							<small className='text-end text-gray-500 cursor-pointer' onClick={() => { setShowLogin(false); setShowLoginPhone(true) }}>{t("or")}{" "}{t("Phone Number")}</small>
 						</label>
 						<input
 							type='email'

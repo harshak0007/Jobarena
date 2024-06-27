@@ -63,7 +63,7 @@ const LoginPhone = () => {
 						</div> */}
 						<label htmlFor='email' className='text-[--primary-text] w-full font-medium flex justify-between '>
 							<p>	{t("Phone Number")}</p>
-							<small className='text-end text-gray-500 cursor-pointer' onClick={() => { setShowLoginPhone(false); setShowLogin(true) }}>{t("or email")}</small>
+							<small className='text-end text-gray-500 cursor-pointer' onClick={() => { setShowLoginPhone(false); setShowLogin(true) }}>{t("or")} {" "}{t("email")}</small>
 						</label>
 						<PhoneInput
 							country={'in'}
