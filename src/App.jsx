@@ -6,7 +6,7 @@ import {
 	HomePage, InternshipPage, RegisterPage, JobsPage, LoginHistoryPage,
 } from '@/pages';
 import { useNavbar } from './context/NavbarContext';
-import { Footer, Navbar, InternDetail, JobDetail, AccessDenied, Login } from '@/components';
+import { Footer, Navbar, InternDetail, JobDetail, AccessDenied, Login, LoginPhone } from '@/components';
 import { AdminLogin, Adminpanel, Postinternships, PostJob, ViewAllApplication } from './Admin';
 import UserApplicatiom from './profile/UserApplicatiom';
 import Profile from './profile/Profile';
@@ -14,7 +14,7 @@ import UserapplicationDetail from './Applications/DeatilApplicationUser';
 import DeatilApplication from './Applications/DeatilApplication';
 // import { translate } from './translate';
 const App = () => {
-	const { theme, accessAllowed, showLogin } = useNavbar();
+	const { theme, accessAllowed, showLogin, showLoginPhone } = useNavbar();
 
 	if (!accessAllowed) {
 		return <AccessDenied />
@@ -24,6 +24,7 @@ const App = () => {
 		<div className={`${theme} relative max-w-screen-2xl mx-auto bg-[--background-color]`}>
 			<Navbar />
 			{showLogin && <Login />}
+			{showLoginPhone && <LoginPhone />}
 			<Routes>
 				<Route path='/*' element={<HomePage />} />
 				<Route path='/register' element={<RegisterPage />} />

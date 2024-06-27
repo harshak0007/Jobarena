@@ -1,5 +1,5 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { sendOtpEmail, verifyOtpEmail, sendOtpPhone, verifyOtpPhone, getLoginHistory, getUser, getUserData, loginUser, sendOtpEmailLogin, verifyOtpEmailLogin } from "../utils/api"
+import { sendOtpEmail, verifyOtpEmail, sendOtpPhone, verifyOtpPhone, getLoginHistory, getUser, getUserData, loginUser, sendOtpEmailLogin, verifyOtpEmailLogin, sendOtpPhoneLogin, verifyOtpPhoneLogin } from "../utils/api"
 import { toast } from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 export const NavbarContext = createContext();
@@ -9,9 +9,10 @@ export const NavbarContextProvider = ({ children }) => {
     const [accessAllowed, setAccessAllowed] = useState(false);
     const lastLanguage = localStorage.getItem('lang') || "en";
     const [showLogin, setShowLogin] = useState(false);
+    const [showLoginPhone, setShowLoginPhone] = useState(false);
     const [showOTP, setShowOTP] = useState(false);
     const [otpType, setOtpType] = useState('phone');
-    const [selectedLanguage, setSelectedLanguage] = useState();
+    const [selectedLanguage, setSelectedLanguage] = useState(lastLanguage);
     const [loginHistory, setLoginHistory] = useState([]);
     const { t } = useTranslation();
 
@@ -157,6 +158,42 @@ export const NavbarContextProvider = ({ children }) => {
             return false
         }
     };
+    const handleSendOtpPhoneLogin = async (phone) => {
+
+        try {
+            console.log(phone)
+            const response = await sendOtpPhoneLogin('+' + phone);
+            setOtpType('phoneLogin')
+            localStorage.setItem('phone', '+' + phone)
+            toast.success("OTP sent to your phone.");
+            // setOtpType("phone")
+            setShowLoginPhone(false)
+            setShowOTP(true)
+            console.log(response.data)
+
+
+        } catch (error) {
+            toast.error("Failed to send OTP.");
+
+        }
+    }
+
+
+    const handleVerifyOtpPhoneLogin = async (otp) => {
+        try {
+            const phone = localStorage.getItem('phone')
+            const res = await verifyOtpPhoneLogin(phone, otp);
+            localStorage.removeItem('phone')
+            setUser(res.name)
+            setShowOTP(false)
+            toast.success("OTP verified successfully.");
+            return true
+        } catch (error) {
+            setShowOTP(false)
+            toast.error("Invalid OTP. Please try again.");
+            return false
+        }
+    };
     const handleLoginHistory = async (otp) => {
         try {
             const response = await getLoginHistory(otp);
@@ -226,7 +263,7 @@ export const NavbarContextProvider = ({ children }) => {
     }, []);
 
     return (
-        <NavbarContext.Provider value={{ showLogin, setShowLogin, user, setUser, handleSendOtpEmail, handleVerifyOtpEmail, showOTP, setShowOTP, handleSendOtpPhone, handleVerifyOtpPhone, otpType, selectedLanguage, setSelectedLanguage, t, theme, toast, setTheme, themeMap, handleLoginHistory, handleLogin, loginHistory, imageMap, handleUser, handleUserData, userData, handleVerifyOtpEmailLogin, accessAllowed }}>
+        <NavbarContext.Provider value={{ showLogin, setShowLogin, user, setUser, handleSendOtpEmail, handleVerifyOtpEmail, showOTP, setShowOTP, handleSendOtpPhone, handleVerifyOtpPhone, otpType, selectedLanguage, setSelectedLanguage, t, theme, toast, setTheme, themeMap, handleLoginHistory, handleLogin, loginHistory, imageMap, handleUser, handleUserData, userData, handleVerifyOtpEmailLogin, accessAllowed, handleVerifyOtpPhoneLogin, handleSendOtpPhoneLogin, showLoginPhone, setShowLoginPhone }}>
             {children}
         </NavbarContext.Provider>
     );

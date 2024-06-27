@@ -20,12 +20,22 @@ export const sendOtpEmail = () => {
 export const sendOtpEmailLogin = (email) => {
     return axios.post(`${API_BASE_URL}/user/send-otp-email-login`, { email });
 };
+export const sendOtpPhoneLogin = (phone) => {
+    return axios.post(`${API_BASE_URL}/user/send-otp-phone-login`, { phone });
+};
 
 export const verifyOtpEmail = (otp) => {
     return axios.post(`${API_BASE_URL}/user/verify-otp-email`, { otp }, getAuthHeader());
 };
 export const verifyOtpEmailLogin = async (email, otp) => {
     const response = await axios.post(`${API_BASE_URL}/user/verify-otp-login`, { email, otp });
+    console.log(response)
+    const { token, sessionId } = response.data;
+    storeAuthInfo(token, sessionId);
+    return response.data;
+};
+export const verifyOtpPhoneLogin = async (phone, otp) => {
+    const response = await axios.post(`${API_BASE_URL}/user/verify-otp-login-phone`, { phone, otp });
     console.log(response)
     const { token, sessionId } = response.data;
     storeAuthInfo(token, sessionId);

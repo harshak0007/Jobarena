@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -6,7 +6,8 @@ import { FcGoogle } from 'react-icons/fc';
 import { MdErrorOutline } from 'react-icons/md';
 import { Login } from './index';
 import { useNavbar } from '@/context/NavbarContext';
-
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import { handleGoogleLogin, signupUser } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
@@ -16,12 +17,13 @@ const registerSchema = z.object({
 	password: z.string().min(6, { message: 'Password must be at least 6 characters long' }),
 	firstName: z.string().min(1, { message: 'First name is required' }),
 	lastName: z.string().min(1, { message: 'Last name is required' }),
-	phone: z.string().min(1, { message: 'Phone is required' }),
+
 });
 
 const Registration = () => {
 	const { showLogin, setShowLogin, setUser, t } = useNavbar();
 	const navigate = useNavigate();
+	const [ph, setPh] = useState('');
 
 
 
@@ -50,7 +52,7 @@ const Registration = () => {
 			name: data.firstName + " " + data.lastName,
 			email: data.email,
 			password: data.password,
-			phone: data.phone
+			phone: '+' + ph
 		}
 		console.log(formData)
 		try {
@@ -177,19 +179,14 @@ const Registration = () => {
 							<label htmlFor='phoneNo' className='text-[--primary-text] font-medium text-[13px] md:text-sm '>
 								{t("Phone Number")}
 							</label>
-							<input
-								type='number'
-								name='user-phone'
-								id='phoneNo'
-								{...register('phone')}
-								placeholder='1234567890'
-								className='border w-full px-2 py-2 text-sm rounded-sm text-[--base-grey] hover:border-[--primary] focus-within:border-[--primary] outline-none invalid:border-red-500 tracking-wide '
+
+							<PhoneInput
+								country={'in'}
+								value={ph}
+								onChange={setPh}
+
+
 							/>
-							{errors.phone && (
-								<p className='text-red-500 text-sm flex items-center justify-start gap-x-1'>
-									<MdErrorOutline /> {errors.phone.message}
-								</p>
-							)}
 						</div>
 						<small className='text-[--primary-text] text-sm md:text-base'>
 							{t("By signing up, you agree to our")}{' '}

@@ -16,7 +16,7 @@ const OTP = () => {
 	const { i18n, t } = useTranslation();
 	const dispatch = useDispatch();
 	// const language = useSelector((state) => state.language)
-	const { setShowOTP, handleVerifyOtpEmail, handleVerifyOtpPhone, otpType, selectedLanguage, handleVerifyOtpEmailLogin, setSelectedLanguage, setTheme, themeMap } = useNavbar();
+	const { setShowOTP, handleVerifyOtpEmail, handleVerifyOtpPhone, otpType, selectedLanguage, handleVerifyOtpEmailLogin, handleVerifyOtpPhoneLogin, setSelectedLanguage, setTheme, themeMap } = useNavbar();
 
 	const [otp, setOtp] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -26,17 +26,21 @@ const OTP = () => {
 	const handleVerifyOtp = async () => {
 		try {
 			setLoading(true)
-			console.log(otp)
+			console.log(otpType)
 			let result;
 			if (otpType === 'email') {
 				result = await handleVerifyOtpEmail(otp);
 			}
-			else if (otpType == 'emailLogin') {
+			else if (otpType === 'emailLogin') {
 				result = await handleVerifyOtpEmailLogin(otp);
+			}
+			else if (otpType === 'phoneLogin') {
+				result = await handleVerifyOtpPhoneLogin(otp);
 			}
 			else {
 				result = await handleVerifyOtpPhone(otp)
 			}
+			console.log(result)
 			if (result) {
 				i18n.changeLanguage(selectedLanguage);
 				localStorage.setItem("lang", selectedLanguage)

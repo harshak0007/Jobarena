@@ -16,7 +16,7 @@ const loginSchema = z.object({
 });
 
 const Login = () => {
-	const { setShowLogin, t, handleLogin } = useNavbar();
+	const { setShowLogin, setShowLoginPhone, t, handleLogin } = useNavbar();
 	const navigate = useNavigate()
 	const {
 		register,
@@ -64,8 +64,9 @@ const Login = () => {
 					className='flex flex-col items-start justify-start gap-y-4 '
 					onSubmit={handleSubmit(onSubmit)}>
 					<div className='flex flex-col items-start justify-start text-sm md:text-base gap-y-1 w-full '>
-						<label htmlFor='email' className='text-[--primary-text] font-medium '>
-							{t("email")}
+						<label htmlFor='email' className='text-[--primary-text] w-full font-medium flex justify-between '>
+							<p>	{t("email")}</p>
+							<small className='text-end text-gray-500 cursor-pointer' onClick={() => { setShowLogin(false); setShowLoginPhone(true) }}>{t("or phone no.")}</small>
 						</label>
 						<input
 							type='email'
@@ -112,6 +113,7 @@ const Login = () => {
 					<p className='self-center text-sm md:text-base text-[--primary-text] font-medium '>
 						{t("new to internarea?")} <Link to='/register' className='hover:underline underline-offset-2 '  > {t("register")}</Link>
 					</p>
+
 				</form>
 			</div>
 		</div>
