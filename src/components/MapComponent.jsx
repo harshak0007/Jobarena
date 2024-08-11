@@ -2,8 +2,12 @@
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 const containerStyle = {
-    width: '50%',
-    height: '400px'
+    width: '100%',
+    height: '100%'
+};
+const containerStyleMobile = {
+    width: '100%',
+    height: '100%'
 };
 
 const center = {
