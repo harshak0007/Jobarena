@@ -6,7 +6,7 @@ import {
 	HomePage, InternshipPage, RegisterPage, JobsPage, LoginHistoryPage,
 } from '@/pages';
 import { useNavbar } from './context/NavbarContext';
-import { Footer, Navbar, InternDetail, JobDetail, AccessDenied, Login, LoginPhone } from '@/components';
+import { Footer, Navbar, InternDetail, JobDetail, AccessDenied, Login, LoginPhone,UserLocation } from '@/components';
 import { AdminLogin, Adminpanel, Postinternships, PostJob, ViewAllApplication } from './Admin';
 import UserApplicatiom from './profile/UserApplicatiom';
 import Profile from './profile/Profile';
@@ -34,6 +34,10 @@ const App = () => {
 				<Route
 					path='/profile'
 					element={<Profile />}
+				/>
+				<Route
+					path='/userlocation'
+					element={<UserLocation />}
 				/>
 				<Route
 					path='/detailjob'

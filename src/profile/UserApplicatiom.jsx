@@ -60,7 +60,7 @@ function UserApplicatiom() {
                           <td className='whitespace-nowrap px-6 py-4'>{new Date(data?.createAt).toLocaleDateString()}</td>
                           <td className='whitespace-nowrap px-6 py-4'>{data.user}</td>
                           <td className='whitespace-nowrap px-6 py-4 text-blue-500'><Link to={`/UserapplicationDetail?a=${data._id}`}>{t("view details")}</Link></td>
-                          <td className='whitespace-nowrap px-6 py-4'>{data.status}</td>
+                          <td className={`whitespace-nowrap px-6 py-4 ${data.status == 'pending' ? 'text-red-500' : 'text-green-500'}`}>{data.status}</td>
                         </tr>
                       </>
                     ))

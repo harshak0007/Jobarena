@@ -14,7 +14,9 @@ export const NavbarContextProvider = ({ children }) => {
     const [otpType, setOtpType] = useState('phone');
     const [selectedLanguage, setSelectedLanguage] = useState(lastLanguage);
     const [loginHistory, setLoginHistory] = useState([]);
+    const [notificationsEnabled, setNotificationsEnabled] = useState();
     const { t } = useTranslation();
+    
 
     const [user, setUser] = useState(false);
     const [userData, setUserData] = useState(false);
@@ -263,7 +265,7 @@ export const NavbarContextProvider = ({ children }) => {
     }, []);
 
     return (
-        <NavbarContext.Provider value={{ showLogin, setShowLogin, user, setUser, handleSendOtpEmail, handleVerifyOtpEmail, showOTP, setShowOTP, handleSendOtpPhone, handleVerifyOtpPhone, otpType, selectedLanguage, setSelectedLanguage, t, theme, toast, setTheme, themeMap, handleLoginHistory, handleLogin, loginHistory, imageMap, handleUser, handleUserData, userData, handleVerifyOtpEmailLogin, accessAllowed, handleVerifyOtpPhoneLogin, handleSendOtpPhoneLogin, showLoginPhone, setShowLoginPhone }}>
+        <NavbarContext.Provider value={{notificationsEnabled,setNotificationsEnabled, showLogin, setShowLogin, user, setUser, handleSendOtpEmail, handleVerifyOtpEmail, showOTP, setShowOTP, handleSendOtpPhone, handleVerifyOtpPhone, otpType, selectedLanguage, setSelectedLanguage, t, theme, toast, setTheme, themeMap, handleLoginHistory, handleLogin, loginHistory, imageMap, handleUser, handleUserData, userData, handleVerifyOtpEmailLogin, accessAllowed, handleVerifyOtpPhoneLogin, handleSendOtpPhoneLogin, showLoginPhone, setShowLoginPhone }}>
             {children}
         </NavbarContext.Provider>
     );

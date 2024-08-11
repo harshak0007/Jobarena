@@ -8,3 +8,4 @@ export { default as InternDetail } from './InternDeatil';
 export { default as JobDetail } from './JobDetail';
 export { default as AccessDenied } from './AccessDenied';
 export { default as LoginPhone } from './LoginPhone';
+export { default as UserLocation } from './UserLocation';
