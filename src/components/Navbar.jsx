@@ -242,7 +242,7 @@ const Navbar = () => {
 					<>
 					<button
 						onClick={() => setShowRegisterMenu(prev => !prev)}
-						className='flex justify-center items-center gap-x-1 bg-[--button-background-color] text-[--nav-button-color] font-semibold px-2 py-1 lg:px-4 lg:py-2 text-sm lg:text-base rounded outline-none border border-[--button-background-color-border] hover:text-[--nav-button-color-2] hover:border-[--button-background-color] hover:bg-transparent sm:hidden'>
+						className='flex justify-center items-center gap-x-1 bg-[--button-background-color] text-[--nav-button-color] font-semibold px-2 py-1 lg:px-4 lg:py-2 text-sm lg:text-base rounded outline-none border border-[--button-background-color-border]  sm:hidden'>
 						{t("register")} <ChevronDown className='size-4 mt-1' />{' '}
 					</button>
 					
