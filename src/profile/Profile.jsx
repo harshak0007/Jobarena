@@ -31,7 +31,7 @@ function Profile() {
       console.log(notificationsEnabled)
   }
   else{
-    setNotificationsEnabled(true)
+    setNotificationsEnabled("true")
   }
     handleUserData()
   }, [])
