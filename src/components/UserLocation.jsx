@@ -40,7 +40,7 @@ const UserLoaction = () => {
   return (
     <div className="w-full md:py-8">
       <div className=" w-[100%] md:w-[80%] mx-auto bg-white shadow-lg rounded-lg flex flex-col md:flex-row p-3 md:p-6 justify-between">
-        <div className="w-[100%] h-[250px] md:h-[400px] md:[40%] border border-black">
+        <div className="w-[100%] h-[250px] md:h-[400px] md:w-[50%] ">
           <MapComponent latitude={latitude} longitude={longitude} />
         </div>
 
