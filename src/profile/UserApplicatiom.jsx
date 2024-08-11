@@ -10,7 +10,7 @@ import { useNavbar } from '@/context/NavbarContext';
 function UserApplicatiom() {
 
   const [application, setApplication] = useState([])
-  const { user, t } = useNavbar()
+  const { user, t,notificationsEnabled,setNotificationsEnabled } = useNavbar()
   const userapplication = application.filter(app => app.user === user)
   useEffect(() => {
     const fetchApplication = async () => {
@@ -18,6 +18,15 @@ function UserApplicatiom() {
         console.log(user)
         const response = await axios.get("https://jobarena-backend.onrender.com/api/application")
         setApplication(response.data)
+
+        response.data.map((el)=>{
+          if(el.status==='accepted'){
+            
+            showNotification(`${el.company} hired you!`, 'hired');
+          }else if(el.status==='rejected'){
+            showNotification(`${el.company} rejected your application.`, 'rejected');
+          }
+        })
 
       } catch (error) {
         alert(error)
@@ -28,6 +37,49 @@ function UserApplicatiom() {
 
   }, [])
   console.log(application)
+  useEffect(() => {
+    if (notificationsEnabled) {
+        Notification.requestPermission().then(permission => {
+            if (permission !== "granted") {
+                setNotificationsEnabled("false");
+            }
+        });
+    }
+}, [notificationsEnabled]);
+const requestNotificationPermission = () => {
+  
+
+  Notification.requestPermission().then(permission => {
+      if (permission === "granted") {
+          console.log("Notification permission granted.");          
+        } else {
+          console.log("Notification permission denied or default.");
+      }
+  });
+};
+const showNotification = (message, type) => {
+  console.log(Notification)
+  requestNotificationPermission();
+  console.log(notificationsEnabled)
+  if (notificationsEnabled && Notification.permission === "granted") {
+      new Notification(message, {
+          body: `You have been ${type}.`,
+          icon: '/logo.jpg',
+          badge: 'https://img.freepik.com/free-photo/smooth-green-background_53876-108464.jpg',
+          tag: type,
+          image:type==='hired'?'https://img.freepik.com/free-photo/smooth-green-background_53876-108464.jpg':'https://img.freepik.com/free-photo/gradient-blue-abstract-background-smooth-dark-blue-with-black-vignette-studio_1258-68032.jpg?size=626&ext=jpg&ga=GA1.1.2008272138.1722643200&semt=ais_hybrid',
+          renotify: true,
+          silent: false,
+          requireInteraction: false,
+          data: {
+              type
+          }
+      }).onclick = function() {
+          window.focus();
+      };
+  }
+  
+};
   return (
     <div>
       <div className='hidden md:flex flex-col items-center'>
@@ -60,7 +112,7 @@ function UserApplicatiom() {
                           <td className='whitespace-nowrap px-6 py-4'>{new Date(data?.createAt).toLocaleDateString()}</td>
                           <td className='whitespace-nowrap px-6 py-4'>{data.user}</td>
                           <td className='whitespace-nowrap px-6 py-4 text-blue-500'><Link to={`/UserapplicationDetail?a=${data._id}`}>{t("view details")}</Link></td>
-                          <td className={`whitespace-nowrap px-6 py-4 ${data.status == 'pending' ? 'text-red-500' : 'text-green-500'}`}>{data.status}</td>
+                          <td className={`whitespace-nowrap px-6 py-4 ${data.status === 'rejected' && 'text-red-500'}  ${data.status==="accepted"&&'text-green-500'}`}>{data.status}</td>
                         </tr>
                       </>
                     ))

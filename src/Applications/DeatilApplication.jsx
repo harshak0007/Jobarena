@@ -1,11 +1,12 @@
 import { useNavbar } from '@/context/NavbarContext';
 import axios from 'axios';
 import { useEffect, useState } from 'react'
-
+import { useNavigate } from 'react-router-dom';
 
 function DeatilApplication() {
-  const { t,notificationsEnabled,setNotificationsEnabled } = useNavbar()
+  const { t } = useNavbar()
   const [data, setData] = useState([])
+  const navigator=useNavigate()
   let search = window.location.search;
   const params = new URLSearchParams(search);
   const id = params.get("a")
@@ -18,63 +19,16 @@ function DeatilApplication() {
     fetchData()
   }, [id])
 
-  useEffect(() => {
-    if (notificationsEnabled) {
-        Notification.requestPermission().then(permission => {
-            if (permission !== "granted") {
-                setNotificationsEnabled(false);
-            }
-        });
-    }
-}, [notificationsEnabled]);
-const requestNotificationPermission = () => {
   
-
-  Notification.requestPermission().then(permission => {
-      if (permission === "granted") {
-          console.log("Notification permission granted.");          
-        } else {
-          console.log("Notification permission denied or default.");
-      }
-  });
-};
-const showNotification = (message, type) => {
-  console.log(Notification)
-  console.log(notificationsEnabled)
- requestNotificationPermission();
-  if (notificationsEnabled && Notification.permission === "granted") {
-      new Notification(message, {
-          body: `You have been ${type}.`,
-          icon: '/logo.jpg',
-          badge: 'https://img.freepik.com/free-photo/smooth-green-background_53876-108464.jpg',
-          tag: type,
-          image:type==='hired'?'https://img.freepik.com/free-photo/smooth-green-background_53876-108464.jpg':'https://img.freepik.com/free-photo/gradient-blue-abstract-background-smooth-dark-blue-with-black-vignette-studio_1258-68032.jpg?size=626&ext=jpg&ga=GA1.1.2008272138.1722643200&semt=ais_hybrid',
-          renotify: true,
-          silent: false,
-          requireInteraction: false,
-          data: {
-              type
-          }
-      }).onclick = function() {
-          window.focus();
-      };
-  }
-  
-};
   const handleAcceptAndReject = async (id, action) => {
     try {
       const response = await axios.put(`https://jobarena-backend.onrender.com/api/application/${id}`, { action })
       const UpdateApplication = data.map(app => (app._id === id ? response.data.data : app))
       setData(UpdateApplication)
       console.log("done")
+      navigator("/applications")
 
-      if(action==='accepted'){
-        showNotification('Someone hired you!', 'hired');
-        document.body.style.backgroundColor = "green";
-      }else{
-        showNotification('Someone rejected your application.', 'rejected');
-        document.body.style.backgroundColor = "blue";
-      }
+      
 
     } catch (error) {
       console.log(error)

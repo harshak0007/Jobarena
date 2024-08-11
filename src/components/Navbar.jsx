@@ -15,10 +15,11 @@ const Navbar = () => {
 	const { t } = useTranslation();
 	const [showMenu, setShowMenu] = useState(false);
 	const [showRegisterMenu, setShowRegisterMenu] = useState(false);
+	const [activeMobileLang, setActiveMobileLang] = useState(false);
 
 	const [toggleLanguageMenu, setToggleLanguageMenu] = useState(false);
 	const [toggleProfileMenu, setToggleProfileMenu] = useState(false);
-	const { setShowLogin, user, setUser, handleSendOtpEmail, handleSendOtpPhone, selectedLanguage, setSelectedLanguage, handleUser } = useNavbar();
+	const {admin,setAdmin, setShowLogin, user, setUser, handleSendOtpEmail, handleSendOtpPhone, selectedLanguage, setSelectedLanguage, handleUser } = useNavbar();
 	const navigator = useNavigate()
 
 	const handleLanguageChange = async (language) => {
@@ -48,6 +49,11 @@ const Navbar = () => {
 		navigator('/')
 
 	}
+	const handleLogoutAdmin=()=>{
+		setAdmin(null)
+		localStorage.removeItem('admin')
+		navigator('/')
+	}
 
 	return (
 		<nav className='relative border-b-2 w-full text-nowrap bg-inherit z-20 bg-white'>
@@ -74,8 +80,8 @@ const Navbar = () => {
 					<div
 						className={`lg:hidden absolute top-0 left-0 w-4/5 h-dvh max-w-[320px] bg-[--background-color] shadow-lg rounded-br rounded-tr -translate-x-full transition-transform z-50 text-[--text-color-dark] ${showMenu ? 'translate-x-0' : ''
 							}`}
-						onClick={toggleMenu}>
-						<button className='block ml-auto mr-4 mt-1 text-3xl py-1 px-2'>&times;</button>
+						>
+						<button className='block ml-auto mr-4 mt-1 text-3xl py-1 px-2' onClick={toggleMenu}>&times;</button>
 						{user && (
 							<div className='mb-1 cursor-pointer font-semibold border-b border-dashed'>
 								<Link to='/profile' className='flex gap-x-2 items-center w-full px-4 py-2'>
@@ -103,9 +109,32 @@ const Navbar = () => {
 								</Link>
 							</li>
 							<li className='mb-1 cursor-pointer hover:bg-zinc-100 transition-colors font-semibold '>
-								<Link to='/' className='w-full block px-4 py-3'>
+								<div className='w-full block px-4 py-3' onClick={()=>setActiveMobileLang(!activeMobileLang)}>
 									{t("languages")}
-								</Link>
+								</div>
+								{activeMobileLang&&<ul>
+									{languages.map(language => (
+										<li
+											key={language.value}
+											className={`${selectedLanguage==language.value?'bg-gray-300':""} w-full hover:bg-[--button-background-color-2] text-center  cursor-pointer text-[--text-color-dark] hover:text-[--text-color-hover] `}>
+											<label
+												htmlFor={`language-${language.value}`}
+												className='block w-full px-2 py-1 cursor-pointer '>
+
+												<input
+													type='radio'
+													name='selectLanguage'
+													id={`language-${language.value}`}
+													checked={selectedLanguage === language.value}
+													onClick={() => handleLanguageChange(language.value)}
+													className='appearance-none'
+												/>
+												<span>{language.label}</span>
+											</label>
+										</li>
+									))}
+								
+								</ul>}
 							</li>
 							<hr />
 							{user ? (
@@ -128,6 +157,18 @@ const Navbar = () => {
 								</>
 							) : (
 								<>
+								<li className='mb-1 cursor-pointer hover:bg-zinc-100 transition-colors font-semibold '>
+										<Link to='/hire-talent' className='w-full block px-4 py-3' >
+											{t("hire talent")}
+										</Link>
+									</li>
+								{
+									admin?<li className='mb-1 cursor-pointer hover:bg-zinc-100 transition-colors font-semibold '>
+									<Link onClick={() => handleLogoutAdmin()} className='w-full capitalize block px-4 py-3'>
+										{t("logout")} 
+									</Link>
+								</li>:
+									<>
 									<Link to={'/'}>
 										<li className='mb-1 cursor-pointer hover:bg-zinc-100 transition-colors font-semibold '>
 											<button className='w-full block px-4 py-3' onClick={() => setShowLogin(true)}>
@@ -136,15 +177,17 @@ const Navbar = () => {
 										</li>
 									</Link>
 									<li className='mb-1 cursor-pointer hover:bg-zinc-100 transition-colors font-semibold '>
-										<Link to='/hire-talent' className='w-full block px-4 py-3' >
-											{t("hire talent")}
-										</Link>
-									</li>
-									<li className='mb-1 cursor-pointer hover:bg-zinc-100 transition-colors font-semibold '>
-										<Link to='/adminLogin' className='w-full block px-4 py-3' >
-											{t("admin")}
-										</Link>
-									</li>
+									<Link to='/adminLogin' className='w-full block px-4 py-3' >
+										{t("admin")}
+									</Link>
+									
+								</li>
+									</>
+								}
+									
+									
+									
+									
 								</>
 							)}
 						</ul>
@@ -195,11 +238,14 @@ const Navbar = () => {
 				===========================
 				*/}
 				<div className='relative'>
+					{!admin&&!user&&
+					<>
 					<button
 						onClick={() => setShowRegisterMenu(prev => !prev)}
 						className='flex justify-center items-center gap-x-1 bg-[--button-background-color] text-[--nav-button-color] font-semibold px-2 py-1 lg:px-4 lg:py-2 text-sm lg:text-base rounded outline-none border border-[--button-background-color-border] hover:text-[--nav-button-color-2] hover:border-[--button-background-color] hover:bg-transparent sm:hidden'>
 						{t("register")} <ChevronDown className='size-4 mt-1' />{' '}
 					</button>
+					
 					<ul
 						className={`${showRegisterMenu ? 'block' : 'hidden'
 							} absolute top-full right-0 w-[150%] bg-white shadow-md my-1 rounded `}>
@@ -208,12 +254,31 @@ const Navbar = () => {
 								As a {t("student")}
 							</Link>
 						</li>
+						
+
 						<li>
 							<Link to='/adminLogin' onClick={() => setShowRegisterMenu(false)} className='px-3 py-2 block hover:bg-zinc-100'>
 								As an {t("admin")}
 							</Link>
 						</li>
+						
 					</ul>
+					</>
+					}
+					{
+						admin&&<button
+						onClick={() => handleLogoutAdmin()}
+						className=' capitalize flex justify-center items-center gap-x-1 bg-[--button-background-color] text-[--nav-button-color] font-semibold px-2 py-1 lg:px-4 lg:py-2 text-sm lg:text-base rounded outline-none border border-[--button-background-color-border]  sm:hidden'>
+						{t("logout")} {' '}
+					</button>
+					}
+					{
+						user&&<button
+						onClick={() => handleLogout()}
+						className=' capitalize flex justify-center items-center gap-x-1 bg-[--button-background-color] text-[--nav-button-color] font-semibold px-2 py-1 lg:px-4 lg:py-2 text-sm lg:text-base rounded outline-none border border-[--button-background-color-border]  sm:hidden'>
+						{t("logout")} {' '}
+					</button>
+					}
 					<ul className='hidden sm:flex justify-start items-center gap-x-3 '>
 						<li>
 							<button className='inline-flex gap-x-1 justify-center items-center p-3 hover:bg-zinc-50 rounded-[3px] text-sm text-zinc-600 font-semibold flex-nowrap'>
@@ -226,11 +291,18 @@ const Navbar = () => {
 								className='text-[--nav-button-color-2] text-sm bg-[--nav-button-color] font-semibold px-5 py-2 border border-[--button-background-color] rounded outline-none hidden lg:block'>
 								{t("logout")}
 							</button> :
+							
+								admin?<button
+								onClick={() => handleLogoutAdmin()}
+								className='text-[--nav-button-color-2] text-sm bg-[--nav-button-color] font-semibold px-5 py-2 border border-[--button-background-color] rounded outline-none hidden lg:block'>
+								{t("logout")}
+							</button>: 
 								<button
 									onClick={() => setShowLogin(true)}
 									className='text-white bg-[--button-background-color-border] text-sm font-semibold px-5 py-2 hover:bg-transparent hover:text-[--text-color-dark] hover:border hover:border-[--button-background-color-border] rounded-full outline-none hidden lg:block'>
 									{t("login")}
 								</button>
+							
 							}
 						</li>
 
@@ -241,6 +313,8 @@ const Navbar = () => {
 								{t("hire talent")}
 							</Link>
 						</li>
+						{
+							!user&&!admin&&
 						<li className='break-keep'>
 							<Link
 								to='/adminLogin'
@@ -248,6 +322,7 @@ const Navbar = () => {
 								{t("admin")}
 							</Link>
 						</li>
+						}
 						{user && <li className='break-keep'>
 							<Link
 								to='/history'

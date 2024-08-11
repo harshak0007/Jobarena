@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 function AdminLogin() {
 
-  const { t } = useNavbar()
+  const { t,setAdmin } = useNavbar()
   const [username, setusername] = useState("")
   const [password, setPassword] = useState("")
   const navigate = useNavigate()
@@ -20,8 +20,9 @@ function AdminLogin() {
         password: password
       }
       axios.post("https://jobarena-backend.onrender.com/api/admin/adminLogin", bodyjson).then((res) => {
-        console.log(res, "data is send")
-        alert("success")
+       setAdmin(res.data)
+       console.log(res.data)
+       localStorage.setItem("admin",res.data)
         navigate("/adminPanel")
       }).catch((err) => {
         console.log(err)
